@@ -176,18 +176,19 @@ def gen_vertical_moves(board_obj, board_length):
 
 
 def gen_moves_in_line(line, length):
-    blank_indices = [bi for bi, blank in enumerate(line) if blank == "."]
+    blank_char = '.'
+    blank_indices = [bi for bi, blank in enumerate(line) if blank == blank_char]
     if not blank_indices:
         return
     for blank_index in blank_indices:
         right1 = blank_index + 1
         right2 = blank_index + 2
-        if right2 < length and line[right1] == line[right2] and line[right1] != ".":
+        if right2 < length and line[right1] == line[right2] and line[right1] != blank_char:
             yield (Move.LEFT, blank_index)
 
         left1 = blank_index - 1
         left2 = blank_index - 2
-        if left2 >= 0 and line[left1] == line[left2] and line[left1] != ".":
+        if left2 >= 0 and line[left1] == line[left2] and line[left1] != blank_char:
             yield (Move.RIGHT, blank_index)
 
 
