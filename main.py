@@ -198,29 +198,5 @@ def main():
     solve(board, len(initialboard), "r")
 
 
-def testmain():
-    initial_board_obj = [list(s) for s in """
-....AA
-BBCCE.
-.rr.EF
-GGHHEF
-...I.F
-...IJJ""".strip().splitlines()]
-    size = len(initial_board_obj)
-
-    for (m, coordinate) in gen_horizontal_moves(initial_board_obj, size):
-        print("%s - %s" % (Move.tostr[m], coordinate))
-        new_board_table = make_new_board_from_move(initial_board_obj, size, m, coordinate)
-        print("\n".join(" ".join(row) for row in new_board_table))
-        if initial_board_obj == new_board_table:
-            print("NO MOVE")
-    for (m, coordinate) in gen_vertical_moves(initial_board_obj, size):
-        print("%s - %s" % (Move.tostr[m], coordinate))
-        new_board_table = make_new_board_from_move(initial_board_obj, size, m, coordinate)
-        print("\n".join(" ".join(row) for row in new_board_table))
-        if initial_board_obj == new_board_table:
-            print("NO MOVE")
-
-
 if __name__ == '__main__':
     main()
