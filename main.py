@@ -88,16 +88,12 @@ def solve(board, size, goal_car):
             idx += 1
             continue
 
-        for (m, coordinate) in gen_horizontal_moves(cur_board.table, size):
-            new_board_table = make_new_board_from_move(cur_board.table, size, m, coordinate)
-            new_board = Board(new_board_table, m, cur_board, coordinate)
-            cur_board.add_child(new_board)
-            boards.append(new_board)
-        for (m, coordinate) in gen_vertical_moves(cur_board.table, size):
-            new_board_table = make_new_board_from_move(cur_board.table, size, m, coordinate)
-            new_board = Board(new_board_table, m, cur_board, coordinate)
-            cur_board.add_child(new_board)
-            boards.append(new_board)
+        for directional_move_fn in [gen_horizontal_moves, gen_vertical_moves]:
+            for (m, coordinate) in directional_move_fn(cur_board.table, size):
+                new_board_table = make_new_board_from_move(cur_board.table, size, m, coordinate)
+                new_board = Board(new_board_table, m, cur_board, coordinate)
+                cur_board.add_child(new_board)
+                boards.append(new_board)
 
         idx += 1
 
