@@ -21,16 +21,19 @@ class Move(object):
 
 class BoardContainer(object):
     def __init__(self, boards=None):
-        self.boards = {}
+        self._boards = {}
         if boards is not None:
             for board in boards:
-                self.boards[board] = 1
+                self._boards[board] = 1
 
     def add(self, board):
-        self.boards[board] = 1
+        self._boards[board] = 1
 
     def __contains__(self, board):
-        return board in self.boards
+        return board in self._boards
+
+    def __len__(self):
+        return len(self._boards)
 
 
 class Board(object):
@@ -104,22 +107,17 @@ def solve(board, size, goal_car):
         return False
 
     boards = [board]
+    board_container = BoardContainer()
     idx = 0
     while True:
         cur_board = boards[idx]
         if cur_board.table[goal_row][size - 1] == cur_board.table[goal_row][size - 1 - (goal_car_end - goal_car_start)] == goal_car:
-            print_path(cur_board)
+            print_path(cur_board, show_board=True)
             return True
 
-        continue_with_next_board = False
-        print(idx)
-        for i in range(idx):
-            if cur_board.has_same_table_as(boards[i]):
-                continue_with_next_board = True
-                break
+        idx += 1
 
-        if continue_with_next_board:
-            idx += 1
+        if cur_board in board_container:
             continue
 
         for directional_move_fn in [gen_horizontal_moves, gen_vertical_moves]:
@@ -129,7 +127,7 @@ def solve(board, size, goal_car):
                 cur_board.add_child(new_board)
                 boards.append(new_board)
 
-        idx += 1
+        board_container.add(cur_board)
 
 
 def parse_board(str_board):
