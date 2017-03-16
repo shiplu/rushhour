@@ -19,6 +19,20 @@ class Move(object):
     }
 
 
+class BoardContainer(object):
+    def __init__(self, boards=None):
+        self.boards = {}
+        if boards is not None:
+            for board in boards:
+                self.boards[board] = 1
+
+    def add(self, board):
+        self.boards[board] = 1
+
+    def __contains__(self, board):
+        return board in self.boards
+
+
 class Board(object):
     def __init__(self, table, move=None, parent=None, coordinate=None):
         self.table = table
@@ -32,6 +46,25 @@ class Board(object):
 
     def has_same_table_as(self, board):
         return self.table == board.table
+
+    def serialize(self):
+        return tuple(col for row in self.table for col in row)
+
+    def __hash__(self):
+        return hash(self.serialize())
+
+    def __eq__(self, other):
+        return self.table == other.table
+
+    def __cmp__(self, other):
+        _self = self.serialize()
+        _other = other.serialize()
+        if _self < _other:
+            return -1
+        elif _self == _other:
+            return 0
+        else:
+            return 1
 
 
 def print_path(board, show_board=False, horizontal=False):
@@ -79,6 +112,7 @@ def solve(board, size, goal_car):
             return True
 
         continue_with_next_board = False
+        print(idx)
         for i in range(idx):
             if cur_board.has_same_table_as(boards[i]):
                 continue_with_next_board = True
